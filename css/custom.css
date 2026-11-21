@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Base Layout & Mobile-First (360px baseline)
+   Base Layout & Theme Setup
    ========================================================================== */
 
 :root {
@@ -57,13 +57,11 @@ main.container {
 }
 
 /* ==========================================================================
-   Tabulator Integration with Pico.css CSS Variables
-   Adapts automatically to [data-theme="light"] and [data-theme="dark"]
+   Tabulator Integration & CRITICAL Filter Box Overlap Fix
    ========================================================================== */
 
 .table-wrapper {
   border-radius: var(--table-border-radius);
-  /* overflow-x: auto ensures zero content clipping on ultra-narrow viewports */
   overflow-x: auto;
   box-shadow: var(--pico-box-shadow);
   border: 1px solid var(--pico-muted-border-color);
@@ -74,7 +72,6 @@ main.container {
   border-color: var(--pico-primary);
 }
 
-/* Tabulator Container Override */
 .tabulator {
   background-color: var(--pico-background-color) !important;
   color: var(--pico-color) !important;
@@ -83,7 +80,6 @@ main.container {
   border: none !important;
 }
 
-/* Header Row & Cells */
 .tabulator .tabulator-header {
   background-color: var(--pico-card-background-color) !important;
   border-bottom: 2px solid var(--pico-muted-border-color) !important;
@@ -100,23 +96,44 @@ main.container {
   padding: 0.5rem 0.4rem !important;
 }
 
-/* Header Filter Inputs (built-in Tabulator filters) */
+/* --- FIX FOR OVERLAPPING MAGNIFYING GLASS & FILTER BOXES --- */
 .tabulator .tabulator-header .tabulator-col input,
 .tabulator .tabulator-header .tabulator-col select {
-  font-size: 16px !important; /* Prevents auto-zoom on iOS Safari */
-  padding: 0.3rem 0.4rem !important;
-  margin-top: 0.35rem !important;
+  /* 1. Strip Pico's search icon and pill shape */
+  background-image: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+
+  /* 2. Reset padding so text starts cleanly on the left */
+  padding: 0.35rem 0.5rem !important;
+  padding-inline-start: 0.5rem !important;
+  padding-inline-end: 0.5rem !important;
+
+  /* 3. Visual formatting */
+  font-size: 14px !important;
   border: 1px solid var(--pico-muted-border-color) !important;
   border-radius: var(--pico-border-radius) !important;
   background-color: var(--pico-background-color) !important;
   color: var(--pico-color) !important;
-  height: auto !important;
+  height: 32px !important;
+  min-height: 32px !important;
   line-height: normal !important;
   width: 100% !important;
   box-sizing: border-box !important;
+  box-shadow: none !important;
 }
 
-/* Sort Arrow Color & Contrast Fix (WCAG 2.1 Non-Text Contrast >= 3:1) */
+/* Remove Chrome/Safari native cancel and magnifying glass buttons */
+.tabulator .tabulator-header .tabulator-col input::-webkit-search-decoration,
+.tabulator .tabulator-header .tabulator-col input::-webkit-search-cancel-button,
+.tabulator .tabulator-header .tabulator-col input::-webkit-search-results-button,
+.tabulator .tabulator-header .tabulator-col input::-webkit-search-results-decoration {
+  display: none !important;
+  -webkit-appearance: none !important;
+}
+
+/* Sort Arrow Styling & Contrast */
 .tabulator .tabulator-header .tabulator-col .tabulator-col-sorter .tabulator-arrow {
   border-bottom-color: var(--pico-muted-color) !important;
 }
@@ -133,12 +150,12 @@ main.container {
   border-top-color: var(--pico-primary) !important;
 }
 
-/* Table Rows & Alternating Strips */
+/* Rows & Hover */
 .tabulator .tabulator-row {
   background-color: var(--pico-background-color) !important;
   color: var(--pico-color) !important;
   border-bottom: 1px solid var(--pico-muted-border-color) !important;
-  min-height: 44px; /* Touch target minimum */
+  min-height: 44px;
 }
 
 .tabulator .tabulator-row:nth-child(even) {
@@ -150,30 +167,39 @@ main.container {
 }
 
 .tabulator .tabulator-cell {
-  padding: 0.5rem 0.4rem !important;
+  padding: 0.5rem 0.5rem !important;
   border-right: 1px solid var(--pico-muted-border-color) !important;
   display: inline-flex;
   align-items: center;
 }
 
-/* Links inside cells */
+/* Links */
 .tabulator-cell a.canonical-link,
-.tabulator-responsive-collapse a.canonical-link {
+.tabulator-responsive-collapse a.canonical-link,
+a.project-title-link {
   color: var(--pico-primary) !important;
   text-decoration: underline;
   word-break: break-all;
   outline: none;
 }
 
-.tabulator-cell a.canonical-link:focus-visible,
-.tabulator-responsive-collapse a.canonical-link:focus-visible {
-  outline: 2px solid var(--pico-primary);
-  border-radius: 2px;
+a.project-title-link {
+  font-weight: 700;
+  text-decoration: none;
 }
 
-/* Badges */
+a.project-title-link:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   Taxonomy Badges & Facet Styling
+   ========================================================================== */
+
 .badge {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
   padding: 0.15rem 0.45rem;
   border-radius: 4px;
   font-size: 0.75rem;
@@ -181,17 +207,44 @@ main.container {
   border: 1px solid var(--pico-muted-border-color);
   background-color: var(--pico-card-background-color);
   color: var(--pico-color);
+  white-space: nowrap;
 }
 
-.badge-spa {
+.badge-domain {
   border-color: var(--pico-primary);
-  color: var(--pico-primary);
+  background-color: transparent;
+  color: var(--pico-color);
 }
 
-/* ==========================================================================
-   Responsive Collapse Accordion & Accessible Handle
-   ========================================================================== */
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
 
+.taxonomy-tag {
+  display: inline-block;
+  padding: 0.1rem 0.4rem;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  background-color: var(--pico-muted-border-color);
+  color: var(--pico-color);
+}
+
+.facet-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  border: 1px solid var(--pico-muted-border-color);
+}
+
+/* Responsive Collapse Accordion */
 .tabulator-responsive-collapse {
   padding: 0.75rem !important;
   background-color: var(--pico-card-background-color) !important;
@@ -201,7 +254,7 @@ main.container {
 .tabulator-responsive-collapse dl {
   margin: 0;
   display: grid;
-  grid-template-columns: 90px 1fr;
+  grid-template-columns: 110px 1fr;
   gap: 0.4rem 0.75rem;
   font-size: 0.85rem;
 }
@@ -216,7 +269,6 @@ main.container {
   word-break: break-word;
 }
 
-/* Keyboard-Focusable Responsive Collapse Toggle Handle */
 .tabulator-row .tabulator-responsive-collapse-toggle {
   display: inline-flex !important;
   align-items: center;
@@ -231,11 +283,70 @@ main.container {
 
 .tabulator-row .tabulator-responsive-collapse-toggle:focus-visible {
   outline: 2px solid var(--pico-primary) !important;
-  background-color: var(--pico-card-background-color);
 }
 
 /* ==========================================================================
-   Mobile-First Viewports (<= 480px / 360px baseline)
+   Project Detail View (project.html)
+   ========================================================================== */
+
+.detail-card {
+  padding: 1.5rem;
+  border-radius: var(--table-border-radius);
+  border: 1px solid var(--pico-muted-border-color);
+  background-color: var(--pico-card-background-color);
+  margin-bottom: 1.5rem;
+}
+
+.domain-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--pico-border-radius);
+  background-color: var(--pico-background-color);
+  border: 1px solid var(--pico-muted-border-color);
+  margin-bottom: 1.25rem;
+}
+
+.domain-banner .domain-icon {
+  font-size: 1.8rem;
+}
+
+.facet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.facet-item strong {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--pico-muted-color);
+  margin-bottom: 0.25rem;
+}
+
+.version-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.version-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--pico-muted-border-color);
+}
+
+.version-item:last-child {
+  border-bottom: none;
+}
+
+/* ==========================================================================
+   Mobile-First Viewports (<= 480px / 360px target)
    ========================================================================== */
 @media (max-width: 480px) {
   :root {
@@ -248,7 +359,7 @@ main.container {
   }
 
   .toggle-text {
-    display: none; /* Icon-only on 360px to preserve header space */
+    display: none;
   }
 
   .theme-toggle-btn {

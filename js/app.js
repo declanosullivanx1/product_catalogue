@@ -1,135 +1,71 @@
 /**
- * Personal Product Catalog — Hardened Pre-MVP Controller
- * Fully static, zero-build, vanilla JS runtime.
+ * Personal Product Catalog — Controller
+ * Loads projects.json + taxonomy.json concurrently with zero build steps.
  */
 
 (function () {
   'use strict';
 
-  // --- 1. Safe Theme Management ---
-  const themeToggleBtn = document.getElementById('theme-toggle');
-  const themeIcon = document.getElementById('theme-icon');
-  const themeLabel = document.getElementById('theme-label');
-
-  function getStoredTheme() {
-    try {
-      return localStorage.getItem('theme') || 'light';
-    } catch (e) {
-      return 'light'; // Graceful fallback if storage restricted
-    }
-  }
-
-  function setStoredTheme(theme) {
-    try {
-      localStorage.setItem('theme', theme);
-    } catch (e) {
-      // Storage access disabled; fail silently
-    }
-  }
-
-  function updateThemeUI(theme) {
-    const isDark = theme === 'dark';
-    if (themeIcon) themeIcon.textContent = isDark ? '☀️' : '🌙';
-    if (themeLabel) themeLabel.textContent = isDark ? 'Light Mode' : 'Dark Mode';
-    if (themeToggleBtn) {
-      themeToggleBtn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
-    }
-  }
-
-  function initTheme() {
-    const activeTheme = getStoredTheme();
-    document.documentElement.setAttribute('data-theme', activeTheme);
-    updateThemeUI(activeTheme);
-
-    if (themeToggleBtn) {
-      themeToggleBtn.addEventListener('click', function () {
-        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-        const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-theme', nextTheme);
-        setStoredTheme(nextTheme);
-        updateThemeUI(nextTheme);
-      });
-    }
-  }
-
-  // --- 2. Security: URL Sanitization & Protocol Whitelisting ---
   function sanitizeUrl(rawUrl) {
     if (!rawUrl || typeof rawUrl !== 'string') return '#';
     const trimmed = rawUrl.trim();
-
-    // Defend against javascript: and data: URI DOM injection
-    if (/^(javascript|data|vbscript):/i.test(trimmed)) {
-      console.warn('[Security] Blocked unsafe URI scheme:', trimmed);
-      return '#';
-    }
-
-    // Auto-normalize protocolless URLs to https://
+    if (/^(javascript|data|vbscript):/i.test(trimmed)) return '#';
     if (!/^https?:\/\//i.test(trimmed) && !trimmed.startsWith('#')) {
       return 'https://' + trimmed;
     }
-
     try {
       const parsed = new URL(trimmed);
       if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
         return parsed.href;
       }
-    } catch (err) {
-      // Not a valid absolute URL
-      return '#';
-    }
-
+    } catch (err) {}
     return '#';
   }
 
   function resolveCanonicalUrl(entry) {
-    if (entry.canonicalOverride && typeof entry.canonicalOverride === 'string') {
-      return sanitizeUrl(entry.canonicalOverride);
-    }
-    if (entry.cfProjectName && typeof entry.cfProjectName === 'string') {
-      const cleanName = encodeURIComponent(entry.cfProjectName.trim());
-      return 'https://' + cleanName + '.pages.dev';
-    }
+    if (entry.canonicalOverride) return sanitizeUrl(entry.canonicalOverride);
+    if (entry.cfProjectName) return 'https://' + encodeURIComponent(entry.cfProjectName.trim()) + '.pages.dev';
     return '#';
   }
 
-  // --- 3. DOM Node Generators (Strict Immunity to DOM XSS) ---
-  function createSafeLink(text, url) {
-    const safeUrl = sanitizeUrl(url);
+  function createSafeLink(text, url, className) {
     const a = document.createElement('a');
-    a.href = safeUrl;
-    a.target = '_blank';
-    a.rel = 'noopener noreferrer';
-    a.className = 'canonical-link';
-    a.textContent = text || safeUrl;
+    a.href = sanitizeUrl(url);
+    a.className = className || 'canonical-link';
+    a.textContent = text || url;
+    if (!url.startsWith('#') && !url.startsWith('/')) {
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+    }
     return a;
   }
 
-  function createBadge(text, isSpa) {
-    const span = document.createElement('span');
-    span.className = 'badge' + (isSpa ? ' badge-spa' : '');
-    span.textContent = text;
-    return span;
-  }
-
-  // --- 4. Tabulator Initialization & A11y Polyfill ---
-  function initTable(data) {
+  function initTable(projects, taxonomy) {
     const statusEl = document.getElementById('table-status');
 
-    if (typeof Tabulator === 'undefined') {
-      if (statusEl) {
-        statusEl.innerHTML = '<span style="color: var(--pico-form-element-error-border-color);">' +
-          '<strong>Error:</strong> Tabulator library failed to load from CDN. Please check network connectivity.</span>';
-      }
-      return;
-    }
+    // Build Domain Lookup Map
+    const domainMap = new Map();
+    (taxonomy.domains || []).forEach(function (d) {
+      domainMap.set(d.id, { label: d.label, icon: d.icon || '📁' });
+    });
 
-    const processedData = data.map(function (item) {
+    // Populate data with resolved domain text
+    const processedData = projects.map(function (item) {
+      const dom = domainMap.get(item.primary_domain) || { label: 'General', icon: '📦' };
       return {
-        name: typeof item.name === 'string' ? item.name : 'Untitled',
-        description: typeof item.description === 'string' ? item.description : '',
-        type: typeof item.type === 'string' ? item.type : 'Other',
+        slug: item.slug || '',
+        name: item.name || 'Untitled',
+        description: item.description || '',
+        type: item.type || 'Other',
+        domainId: item.primary_domain || '',
+        domainLabel: dom.label,
+        domainDisplay: dom.icon + ' ' + dom.label,
+        subCategories: item.sub_categories || [],
+        tags: item.tags || [],
         canonicalUrl: resolveCanonicalUrl(item),
-        status: typeof item.status === 'string' ? item.status : 'Active'
+        status: item.status || 'Active',
+        platform: item.platform || [],
+        cfProjectName: item.cfProjectName || null
       };
     });
 
@@ -139,32 +75,51 @@
         layout: 'fitColumns',
         responsiveLayout: 'collapse',
         responsiveLayoutCollapseStartOpen: false,
-        headerVisible: true,
         placeholder: 'No matching projects found.',
 
-        // Accessible key/value DL for collapsed rows (DOM-safe)
+        // Responsive Collapse: Shows full taxonomy metadata
         responsiveLayoutCollapseFormatter: function (data) {
-          const list = document.createElement('dl');
+          const dl = document.createElement('dl');
+          const rowData = data[0] ? data[0].getRow().getData() : null;
+
           data.forEach(function (col) {
-            if (col.value !== undefined && col.title) {
+            if (col.value !== undefined && col.title && col.field !== 'domainDisplay') {
               const dt = document.createElement('dt');
               dt.textContent = col.title;
-
               const dd = document.createElement('dd');
+
               if (col.field === 'canonicalUrl') {
                 dd.appendChild(createSafeLink(col.value, col.value));
               } else {
                 dd.textContent = col.value;
               }
-
-              list.appendChild(dt);
-              list.appendChild(dd);
+              dl.appendChild(dt);
+              dl.appendChild(dd);
             }
           });
-          return list;
+
+          // Render Tags & Subcategories inside accordion
+          if (rowData && rowData.tags && rowData.tags.length > 0) {
+            const dtTags = document.createElement('dt');
+            dtTags.textContent = 'Tags';
+            const ddTags = document.createElement('dd');
+            const ul = document.createElement('ul');
+            ul.className = 'tag-list';
+            rowData.tags.forEach(function (t) {
+              const li = document.createElement('li');
+              li.className = 'taxonomy-tag';
+              li.textContent = '#' + t;
+              ul.appendChild(li);
+            });
+            ddTags.appendChild(ul);
+            dl.appendChild(dtTags);
+            dl.appendChild(ddTags);
+          }
+
+          return dl;
         },
 
-        // WCAG 2.1.1 Accessibility Polyfill: Runs per row rendering
+        // Keyboard Operability Polyfill
         rowFormatter: function (row) {
           const toggle = row.getElement().querySelector('.tabulator-responsive-collapse-toggle');
           if (toggle && !toggle.dataset.a11yInit) {
@@ -172,11 +127,8 @@
             toggle.setAttribute('tabindex', '0');
             toggle.setAttribute('role', 'button');
             toggle.setAttribute('aria-expanded', 'false');
+            toggle.setAttribute('aria-label', 'Toggle details');
 
-            const projectName = row.getData().name || 'project';
-            toggle.setAttribute('aria-label', 'Toggle details for ' + projectName);
-
-            // Enable Enter & Spacebar activation on the toggle
             toggle.addEventListener('keydown', function (e) {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -184,16 +136,14 @@
               }
             });
 
-            // Synchronize aria-expanded attribute
             toggle.addEventListener('click', function () {
-              const isExpanded = toggle.classList.contains('open');
-              toggle.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+              const isOpen = toggle.classList.contains('open');
+              toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
             });
           }
         },
 
         columns: [
-          // Responsive collapse handle
           {
             formatter: 'responsiveCollapse',
             width: 36,
@@ -202,77 +152,101 @@
             resizable: false,
             headerSort: false
           },
-          // Project Name (Always visible; search searches name, type, and description)
+          // Project Column: Links to project.html detail page
           {
             title: 'Project',
             field: 'name',
-            minWidth: 120,
+            minWidth: 140,
             responsive: 0,
             headerFilter: 'input',
             headerFilterPlaceholder: 'Search...',
-            // Universal filter function: Allows filtering collapsed metadata on mobile
+            // Universal Search across Name, Description, Domain, and Tags
             headerFilterFunc: function (headerValue, rowValue, rowData) {
               if (!headerValue) return true;
-              const term = headerValue.toLowerCase().trim();
-              const nameMatch = (rowData.name || '').toLowerCase().includes(term);
-              const descMatch = (rowData.description || '').toLowerCase().includes(term);
-              const typeMatch = (rowData.type || '').toLowerCase().includes(term);
-              return nameMatch || descMatch || typeMatch;
+              const q = headerValue.toLowerCase().trim();
+              const nameMatch = (rowData.name || '').toLowerCase().includes(q);
+              const descMatch = (rowData.description || '').toLowerCase().includes(q);
+              const domainMatch = (rowData.domainLabel || '').toLowerCase().includes(q);
+              const tagMatch = (rowData.tags || []).some(function (t) { return t.toLowerCase().includes(q); });
+              return nameMatch || descMatch || domainMatch || tagMatch;
             },
             formatter: function (cell) {
               const row = cell.getRow().getData();
-              const strong = document.createElement('strong');
-              strong.appendChild(createSafeLink(cell.getValue(), row.canonicalUrl));
-              return strong; // DOM Node prevents XSS
+              const container = document.createElement('div');
+              const link = document.createElement('a');
+              link.href = 'project.html?p=' + encodeURIComponent(row.slug);
+              link.className = 'project-title-link';
+              link.textContent = cell.getValue();
+              container.appendChild(link);
+              return container;
             }
           },
-          // Canonical URL (Desktop priority)
+          // Domain Column: Displays icon + label with built-in dropdown filter
+          {
+            title: 'Primary Domain',
+            field: 'domainDisplay',
+            minWidth: 160,
+            responsive: 1,
+            headerFilter: 'list',
+            headerFilterParams: { valuesLookup: true, clearable: true },
+            headerFilterPlaceholder: 'All Domains',
+            formatter: function (cell) {
+              const span = document.createElement('span');
+              span.className = 'badge badge-domain';
+              span.textContent = cell.getValue();
+              return span;
+            }
+          },
+          // Canonical URL
           {
             title: 'Canonical URL',
             field: 'canonicalUrl',
             minWidth: 160,
-            responsive: 1,
+            responsive: 2,
             headerFilter: 'input',
             headerFilterPlaceholder: 'Filter URL...',
             formatter: function (cell) {
               return createSafeLink(cell.getValue(), cell.getValue());
             }
           },
-          // Type (Collapses on small screens)
+          // Type Column
           {
             title: 'Type',
             field: 'type',
-            width: 95,
-            minWidth: 85,
-            responsive: 2,
+            width: 90,
+            responsive: 3,
             hozAlign: 'center',
             headerFilter: 'list',
             headerFilterParams: { valuesLookup: true, clearable: true },
             headerFilterPlaceholder: 'All',
             formatter: function (cell) {
-              const val = cell.getValue();
-              return createBadge(val, val.toLowerCase() === 'spa');
+              const span = document.createElement('span');
+              span.className = 'badge';
+              span.textContent = cell.getValue();
+              return span;
             }
           },
-          // Description (Collapses on mobile)
+          // Description
           {
             title: 'Description',
             field: 'description',
-            minWidth: 160,
-            responsive: 3,
+            minWidth: 180,
+            responsive: 4,
             headerFilter: 'input',
-            headerFilterPlaceholder: 'Filter...'
+            headerFilterPlaceholder: 'Filter text...'
           },
-          // Status (Collapses on mobile)
+          // Status
           {
             title: 'Status',
             field: 'status',
             width: 95,
-            minWidth: 85,
-            responsive: 4,
+            responsive: 5,
             hozAlign: 'center',
             formatter: function (cell) {
-              return createBadge(cell.getValue(), false);
+              const span = document.createElement('span');
+              span.className = 'badge';
+              span.textContent = cell.getValue();
+              return span;
             }
           }
         ]
@@ -290,39 +264,23 @@
     }
   }
 
-  // --- 5. Bootstrapper with Detailed Parsing Diagnostics ---
   function initApp() {
-    initTheme();
-
     const statusEl = document.getElementById('table-status');
 
-    fetch('./projects.json', { cache: 'no-cache' })
-      .then(function (res) {
-        if (!res.ok) {
-          throw new Error('HTTP ' + res.status + ' (' + res.statusText + ')');
-        }
-        return res.text();
-      })
-      .then(function (rawText) {
-        let projects;
-        try {
-          projects = JSON.parse(rawText);
-        } catch (jsonErr) {
-          throw new Error('Invalid JSON in projects.json: ' + jsonErr.message);
-        }
-
-        if (!Array.isArray(projects)) {
-          throw new Error('Malformed data structure: projects.json root must be an array.');
-        }
-
-        initTable(projects);
-      })
-      .catch(function (error) {
-        if (statusEl) {
-          statusEl.innerHTML = '<strong>Failed to load catalog:</strong> ' + error.message + 
-            '<br><small>If you just edited <code>projects.json</code>, verify syntax (e.g. check for trailing commas).</small>';
-        }
-      });
+    Promise.all([
+      fetch('./projects.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }),
+      fetch('./taxonomy.json', { cache: 'no-cache' }).then(function (r) { return r.json(); })
+    ])
+    .then(function (results) {
+      const projects = results[0];
+      const taxonomy = results[1];
+      initTable(projects, taxonomy);
+    })
+    .catch(function (err) {
+      if (statusEl) {
+        statusEl.innerHTML = '<strong>Error loading catalog data:</strong> ' + err.message;
+      }
+    });
   }
 
   if (document.readyState === 'loading') {

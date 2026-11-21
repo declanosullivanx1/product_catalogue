@@ -1,0 +1,92 @@
+[
+  {
+    "slug": "aura-scaler",
+    "name": "Aura Scaler",
+    "description": "Dynamic WebP/AVIF image transformation pipeline running on Cloudflare Workers.",
+    "type": "SPA",
+    "cfProjectName": "aura-scaler-python",
+    "canonicalOverride": null,
+    "status": "Production",
+    "primary_domain": "visual_imaging",
+    "sub_categories": ["image_generation", "data_visualization"],
+    "tags": ["image-optimization", "webp", "avif", "edge-compute"],
+    "platform": ["web", "api_only"],
+    "delivery_model": ["saas"],
+    "monetization": ["freemium"],
+    "ai_integration": "ai_assisted",
+    "versions": [
+      { "hash": "a0a5e86", "date": "2026-11-21", "label": "v1.2.0" },
+      { "hash": "8f3b129", "date": "2026-10-15", "label": "v1.1.0" }
+    ]
+  },
+  {
+    "slug": "hexgrid-engine",
+    "name": "HexGrid Engine",
+    "description": "Discrete procedural terrain generator with interactive SVG rendering.",
+    "type": "SPA",
+    "cfProjectName": "hex-grid-engine",
+    "canonicalOverride": null,
+    "status": "Production",
+    "primary_domain": "entertainment_media",
+    "sub_categories": ["gaming", "interactive_storytelling"],
+    "tags": ["procedural-generation", "svg", "hexgrid", "game-dev"],
+    "platform": ["web"],
+    "delivery_model": ["pwa"],
+    "monetization": ["open_source"],
+    "ai_integration": "none",
+    "versions": [
+      { "hash": "c4d1e2f", "date": "2026-11-10", "label": "v0.9.4" }
+    ]
+  },
+  {
+    "slug": "k8s-pod-reaper",
+    "name": "k8s-pod-reaper",
+    "description": "Lightweight Rust CLI daemon that sweeps and terminates orphaned development pods.",
+    "type": "CLI",
+    "cfProjectName": null,
+    "canonicalOverride": "https://github.com/example/k8s-pod-reaper",
+    "status": "Active",
+    "primary_domain": "developer_technical_tools",
+    "sub_categories": ["devops_cicd", "infrastructure_cloud"],
+    "tags": ["kubernetes", "rust", "cli", "devops", "cleanup"],
+    "platform": ["cli", "desktop_linux"],
+    "delivery_model": ["native_app"],
+    "monetization": ["open_source"],
+    "ai_integration": "none",
+    "versions": []
+  },
+  {
+    "slug": "py-geo-locator",
+    "name": "py-geo-locator",
+    "description": "Fast memory-mapped MaxMind DB query wrapper with zero runtime dependencies.",
+    "type": "Library",
+    "cfProjectName": null,
+    "canonicalOverride": "https://pypi.org/project/py-geo-locator/",
+    "status": "Active",
+    "primary_domain": "navigation_location",
+    "sub_categories": ["maps_directions", "fleet_logistics"],
+    "tags": ["python", "maxmind", "geoip", "zero-dependency"],
+    "platform": ["api_only"],
+    "delivery_model": ["sdk_library"],
+    "monetization": ["open_source"],
+    "ai_integration": "none",
+    "versions": []
+  },
+  {
+    "slug": "statusping-edge-api",
+    "name": "StatusPing Edge API",
+    "description": "Multi-region synthetic ping monitor running across distributed edge nodes.",
+    "type": "API",
+    "cfProjectName": null,
+    "canonicalOverride": "https://api.statusping.dev",
+    "status": "Beta",
+    "primary_domain": "developer_technical_tools",
+    "sub_categories": ["devops_cicd", "infrastructure_cloud"],
+    "tags": ["synthetic-monitoring", "uptime", "edge-network"],
+    "platform": ["api_only"],
+    "delivery_model": ["saas"],
+    "monetization": ["subscription"],
+    "ai_integration": "none",
+    "versions": []
+  }
+]

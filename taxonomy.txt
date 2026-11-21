@@ -1,0 +1,84 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-11-22",
+  "schema": {
+    "primary_domain": { "type": "single-select", "required": true, "label": "Primary Domain" },
+    "secondary_domains": { "type": "multi-select", "required": false, "label": "Secondary Domains" },
+    "sub_categories": { "type": "multi-select", "required": false, "label": "Sub-Categories" },
+    "tags": { "type": "freeform-tags", "required": false, "label": "Tags" }
+  },
+  "domains": [
+    { "id": "audio_sound", "label": "Audio & Sound", "icon": "🎵", "description": "Music, podcasts, sound design, voice" },
+    { "id": "visual_imaging", "label": "Visual & Imaging", "icon": "👁️", "description": "Photography, video, graphics, animation" },
+    { "id": "text_language", "label": "Text & Language", "icon": "✍️", "description": "Writing, translation, NLP, documentation" },
+    { "id": "research_knowledge", "label": "Research & Knowledge", "icon": "🔬", "description": "Academic, scientific, data gathering, reference" },
+    { "id": "business_enterprise", "label": "Business & Enterprise", "icon": "💼", "description": "Operations, strategy, management, B2B tools" },
+    { "id": "finance_economics", "label": "Finance & Economics", "icon": "💰", "description": "Banking, investing, accounting, fintech" },
+    { "id": "education_learning", "label": "Education & Learning", "icon": "📚", "description": "EdTech, courses, tutoring, skill-building" },
+    { "id": "health_wellness", "label": "Health & Wellness", "icon": "🏥", "description": "Fitness, mental health, medical, nutrition" },
+    { "id": "social_communication", "label": "Social & Communication", "icon": "💬", "description": "Messaging, networking, community, collaboration" },
+    { "id": "entertainment_media", "label": "Entertainment & Media", "icon": "🎮", "description": "Streaming, gaming, content consumption" },
+    { "id": "commerce_retail", "label": "Commerce & Retail", "icon": "🛒", "description": "E-commerce, marketplaces, shopping" },
+    { "id": "productivity_organization", "label": "Productivity & Organization", "icon": "⚡", "description": "Task management, notes, scheduling, workflow" },
+    { "id": "developer_technical_tools", "label": "Developer & Technical Tools", "icon": "🛠️", "description": "IDEs, APIs, DevOps, testing, infrastructure" },
+    { "id": "data_analytics", "label": "Data & Analytics", "icon": "📊", "description": "BI, visualization, data pipelines, ML/AI" },
+    { "id": "design_creative", "label": "Design & Creative", "icon": "🎨", "description": "UI/UX, branding, prototyping, industrial design" },
+    { "id": "marketing_growth", "label": "Marketing & Growth", "icon": "📣", "description": "SEO, advertising, CRM, email campaigns" },
+    { "id": "security_privacy", "label": "Security & Privacy", "icon": "🔒", "description": "Cybersecurity, encryption, identity, compliance" },
+    { "id": "navigation_location", "label": "Navigation & Location", "icon": "🗺️", "description": "Maps, GPS, travel, logistics, geospatial" },
+    { "id": "home_lifestyle", "label": "Home & Lifestyle", "icon": "🏠", "description": "Smart home, cooking, fashion, hobbies" },
+    { "id": "legal_governance", "label": "Legal & Governance", "icon": "⚖️", "description": "Contracts, compliance, policy, civic tech" },
+    { "id": "science_engineering", "label": "Science & Engineering", "icon": "🔭", "description": "Simulation, lab tools, CAD, R&D" },
+    { "id": "environment_sustainability", "label": "Environment & Sustainability", "icon": "🌍", "description": "Climate, energy, agriculture, conservation" },
+    { "id": "real_estate_property", "label": "Real Estate & Property", "icon": "🏗️", "description": "Listings, property management, construction" },
+    { "id": "transportation_mobility", "label": "Transportation & Mobility", "icon": "🚗", "description": "Ride-sharing, fleet, autonomous, delivery" },
+    { "id": "government_public_sector", "label": "Government & Public Sector", "icon": "🏛️", "description": "Civic services, public records, e-governance" },
+    { "id": "human_resources_talent", "label": "Human Resources & Talent", "icon": "👥", "description": "Recruiting, payroll, performance, culture" },
+    { "id": "events_experiences", "label": "Events & Experiences", "icon": "🎪", "description": "Ticketing, planning, virtual events, hospitality" },
+    { "id": "agriculture_food_systems", "label": "Agriculture & Food Systems", "icon": "🌾", "description": "Farming, supply chain, food tech, restaurant" },
+    { "id": "sports_recreation", "label": "Sports & Recreation", "icon": "⚽", "description": "Athletics, coaching, outdoor, fantasy sports" },
+    { "id": "accessibility_inclusion", "label": "Accessibility & Inclusion", "icon": "♿", "description": "Assistive tech, universal design, equity tools" }
+  ],
+  "facets": {
+    "platform": {
+      "label": "Platform",
+      "options": [
+        {"id": "web", "label": "Web"},
+        {"id": "cli", "label": "CLI"},
+        {"id": "api_only", "label": "API-only"},
+        {"id": "desktop_linux", "label": "Desktop (Linux)"},
+        {"id": "desktop_macos", "label": "Desktop (macOS)"},
+        {"id": "desktop_windows", "label": "Desktop (Windows)"},
+        {"id": "ios", "label": "iOS"},
+        {"id": "android", "label": "Android"}
+      ]
+    },
+    "delivery_model": {
+      "label": "Delivery Model",
+      "options": [
+        {"id": "saas", "label": "SaaS"},
+        {"id": "pwa", "label": "PWA"},
+        {"id": "native_app", "label": "Native App"},
+        {"id": "sdk_library", "label": "SDK / Library"}
+      ]
+    },
+    "monetization": {
+      "label": "Monetization",
+      "options": [
+        {"id": "open_source", "label": "Open Source"},
+        {"id": "free", "label": "Free"},
+        {"id": "freemium", "label": "Freemium"},
+        {"id": "subscription", "label": "Subscription"}
+      ]
+    },
+    "ai_integration": {
+      "label": "AI/ML Integration",
+      "options": [
+        {"id": "none", "label": "None"},
+        {"id": "ai_assisted", "label": "AI-Assisted"},
+        {"id": "ai_powered", "label": "AI-Powered"},
+        {"id": "generative_ai", "label": "Generative AI"}
+      ]
+    }
+  }
+}
