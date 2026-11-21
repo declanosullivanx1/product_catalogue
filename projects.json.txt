@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Aura Scaler",
+    "description": "Dynamic WebP/AVIF image transformation pipeline running on Cloudflare Workers.",
+    "type": "SPA",
+    "cfProjectName": "aura-scaler-python",
+    "canonicalOverride": null,
+    "status": "Production"
+  },
+  {
+    "name": "HexGrid Engine",
+    "description": "Discrete procedural terrain generator with interactive SVG rendering.",
+    "type": "SPA",
+    "cfProjectName": "hex-grid-engine",
+    "canonicalOverride": null,
+    "status": "Production"
+  },
+  {
+    "name": "k8s-pod-reaper",
+    "description": "Lightweight Rust CLI daemon that sweeps and terminates orphaned development pods.",
+    "type": "CLI",
+    "cfProjectName": null,
+    "canonicalOverride": "https://github.com/example/k8s-pod-reaper",
+    "status": "Active"
+  },
+  {
+    "name": "py-geo-locator",
+    "description": "Fast memory-mapped MaxMind DB query wrapper with zero runtime dependencies.",
+    "type": "Library",
+    "cfProjectName": null,
+    "canonicalOverride": "https://pypi.org/project/py-geo-locator/",
+    "status": "Active"
+  },
+  {
+    "name": "StatusPing Edge API",
+    "description": "Multi-region synthetic ping monitor running across distributed edge nodes.",
+    "type": "API",
+    "cfProjectName": null,
+    "canonicalOverride": "https://api.statusping.dev",
+    "status": "Beta"
+  }
+]

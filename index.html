@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product Catalog</title>
+  <meta name="description" content="Production catalog of web apps, CLIs, libraries, and APIs.">
+
+  <!-- CRITICAL: Hardened theme script wrapped in try/catch to survive Safari Private Browsing -->
+  <script>
+    (function () {
+      let theme = 'light';
+      try {
+        const saved = localStorage.getItem('theme');
+        if (saved === 'dark' || saved === 'light') {
+          theme = saved;
+        }
+      } catch (e) {
+        // Storage access blocked/restricted; gracefully fallback to explicit 'light'
+      }
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+
+  <!-- Pico.css v2 (CDN) -->
+  <link rel="stylesheet" 
+        href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" 
+        crossorigin="anonymous">
+
+  <!-- Tabulator v6.2 (CDN) -->
+  <link rel="stylesheet" 
+        href="https://unpkg.com/tabulator-tables@6.2.5/dist/css/tabulator.min.css" 
+        crossorigin="anonymous">
+
+  <!-- Custom Site Styling -->
+  <link rel="stylesheet" href="css/custom.css">
+</head>
+<body>
+  <header class="container header-container">
+    <nav aria-label="Main Navigation">
+      <ul>
+        <li><strong>Product Catalog</strong></li>
+      </ul>
+      <ul>
+        <li>
+          <button 
+            id="theme-toggle" 
+            class="outline secondary theme-toggle-btn" 
+            type="button" 
+            aria-label="Toggle dark/light theme" 
+            aria-pressed="false">
+            <span id="theme-icon" aria-hidden="true">🌙</span>
+            <span id="theme-label" class="toggle-text">Dark Mode</span>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section>
+      <div class="lead-header">
+        <p class="description-text">Production deployment index and software registry.</p>
+      </div>
+
+      <!-- Live Loading / Error Feedback Region -->
+      <div id="table-status" role="status" aria-live="polite" class="status-message">
+        <span aria-busy="true">Loading catalog data...</span>
+      </div>
+
+      <!-- Tabulator Mounting Point -->
+      <div id="projects-table" 
+           class="table-wrapper" 
+           role="region" 
+           aria-label="Projects and Products Table"></div>
+    </section>
+  </main>
+
+  <footer class="container footer-container">
+    <small>All production web apps resolve to their canonical <code>*.pages.dev</code> alias.</small>
+  </footer>
+
+  <!-- Tabulator JS -->
+  <script src="https://unpkg.com/tabulator-tables@6.2.5/dist/js/tabulator.min.js" crossorigin="anonymous"></script>
+  <!-- Application Logic -->
+  <script src="js/app.js"></script>
+</body>
+</html>

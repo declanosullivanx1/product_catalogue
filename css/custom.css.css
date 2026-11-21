@@ -1,0 +1,257 @@
+/* ==========================================================================
+   Base Layout & Mobile-First (360px baseline)
+   ========================================================================== */
+
+:root {
+  --table-border-radius: 8px;
+  --table-font-size: 0.9rem;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main.container {
+  flex: 1 0 auto;
+  padding-top: 0.75rem;
+  padding-bottom: 2rem;
+}
+
+.header-container {
+  padding-top: 0.75rem;
+  padding-bottom: 0.5rem;
+}
+
+.footer-container {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-top: 1px solid var(--pico-muted-border-color);
+  text-align: center;
+}
+
+.lead-header {
+  margin-bottom: 0.75rem;
+}
+
+.description-text {
+  margin-bottom: 0;
+  color: var(--pico-muted-color);
+  font-size: 0.95rem;
+}
+
+.theme-toggle-btn {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+  margin-bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+}
+
+.status-message {
+  margin: 1rem 0;
+  font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   Tabulator Integration with Pico.css CSS Variables
+   Adapts automatically to [data-theme="light"] and [data-theme="dark"]
+   ========================================================================== */
+
+.table-wrapper {
+  border-radius: var(--table-border-radius);
+  /* overflow-x: auto ensures zero content clipping on ultra-narrow viewports */
+  overflow-x: auto;
+  box-shadow: var(--pico-box-shadow);
+  border: 1px solid var(--pico-muted-border-color);
+  outline: none;
+}
+
+.table-wrapper:focus-within {
+  border-color: var(--pico-primary);
+}
+
+/* Tabulator Container Override */
+.tabulator {
+  background-color: var(--pico-background-color) !important;
+  color: var(--pico-color) !important;
+  font-family: inherit !important;
+  font-size: var(--table-font-size) !important;
+  border: none !important;
+}
+
+/* Header Row & Cells */
+.tabulator .tabulator-header {
+  background-color: var(--pico-card-background-color) !important;
+  border-bottom: 2px solid var(--pico-muted-border-color) !important;
+  color: var(--pico-color) !important;
+  font-weight: 600;
+}
+
+.tabulator .tabulator-header .tabulator-col {
+  background-color: var(--pico-card-background-color) !important;
+  border-right: 1px solid var(--pico-muted-border-color) !important;
+}
+
+.tabulator .tabulator-header .tabulator-col .tabulator-col-content {
+  padding: 0.5rem 0.4rem !important;
+}
+
+/* Header Filter Inputs (built-in Tabulator filters) */
+.tabulator .tabulator-header .tabulator-col input,
+.tabulator .tabulator-header .tabulator-col select {
+  font-size: 16px !important; /* Prevents auto-zoom on iOS Safari */
+  padding: 0.3rem 0.4rem !important;
+  margin-top: 0.35rem !important;
+  border: 1px solid var(--pico-muted-border-color) !important;
+  border-radius: var(--pico-border-radius) !important;
+  background-color: var(--pico-background-color) !important;
+  color: var(--pico-color) !important;
+  height: auto !important;
+  line-height: normal !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Sort Arrow Color & Contrast Fix (WCAG 2.1 Non-Text Contrast >= 3:1) */
+.tabulator .tabulator-header .tabulator-col .tabulator-col-sorter .tabulator-arrow {
+  border-bottom-color: var(--pico-muted-color) !important;
+}
+
+[data-theme="dark"] .tabulator .tabulator-header .tabulator-col .tabulator-col-sorter .tabulator-arrow {
+  border-bottom-color: var(--pico-color) !important;
+}
+
+.tabulator .tabulator-header .tabulator-col.tabulator-sortable[aria-sort="ascending"] .tabulator-arrow {
+  border-bottom-color: var(--pico-primary) !important;
+}
+
+.tabulator .tabulator-header .tabulator-col.tabulator-sortable[aria-sort="descending"] .tabulator-arrow {
+  border-top-color: var(--pico-primary) !important;
+}
+
+/* Table Rows & Alternating Strips */
+.tabulator .tabulator-row {
+  background-color: var(--pico-background-color) !important;
+  color: var(--pico-color) !important;
+  border-bottom: 1px solid var(--pico-muted-border-color) !important;
+  min-height: 44px; /* Touch target minimum */
+}
+
+.tabulator .tabulator-row:nth-child(even) {
+  background-color: var(--pico-card-background-color) !important;
+}
+
+.tabulator .tabulator-row:hover {
+  background-color: var(--pico-primary-background) !important;
+}
+
+.tabulator .tabulator-cell {
+  padding: 0.5rem 0.4rem !important;
+  border-right: 1px solid var(--pico-muted-border-color) !important;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Links inside cells */
+.tabulator-cell a.canonical-link,
+.tabulator-responsive-collapse a.canonical-link {
+  color: var(--pico-primary) !important;
+  text-decoration: underline;
+  word-break: break-all;
+  outline: none;
+}
+
+.tabulator-cell a.canonical-link:focus-visible,
+.tabulator-responsive-collapse a.canonical-link:focus-visible {
+  outline: 2px solid var(--pico-primary);
+  border-radius: 2px;
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid var(--pico-muted-border-color);
+  background-color: var(--pico-card-background-color);
+  color: var(--pico-color);
+}
+
+.badge-spa {
+  border-color: var(--pico-primary);
+  color: var(--pico-primary);
+}
+
+/* ==========================================================================
+   Responsive Collapse Accordion & Accessible Handle
+   ========================================================================== */
+
+.tabulator-responsive-collapse {
+  padding: 0.75rem !important;
+  background-color: var(--pico-card-background-color) !important;
+  border-bottom: 1px solid var(--pico-muted-border-color) !important;
+}
+
+.tabulator-responsive-collapse dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.tabulator-responsive-collapse dt {
+  font-weight: 600;
+  color: var(--pico-muted-color);
+}
+
+.tabulator-responsive-collapse dd {
+  margin: 0;
+  word-break: break-word;
+}
+
+/* Keyboard-Focusable Responsive Collapse Toggle Handle */
+.tabulator-row .tabulator-responsive-collapse-toggle {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  min-height: 32px;
+  cursor: pointer;
+  border-radius: 4px;
+  outline: none;
+  user-select: none;
+}
+
+.tabulator-row .tabulator-responsive-collapse-toggle:focus-visible {
+  outline: 2px solid var(--pico-primary) !important;
+  background-color: var(--pico-card-background-color);
+}
+
+/* ==========================================================================
+   Mobile-First Viewports (<= 480px / 360px baseline)
+   ========================================================================== */
+@media (max-width: 480px) {
+  :root {
+    --table-font-size: 0.85rem;
+  }
+
+  main.container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .toggle-text {
+    display: none; /* Icon-only on 360px to preserve header space */
+  }
+
+  .theme-toggle-btn {
+    padding: 0.4rem 0.6rem;
+  }
+}
