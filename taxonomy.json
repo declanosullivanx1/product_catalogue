@@ -1,6 +1,10 @@
 {
+  "_meta": {
+    "uuid_v7": "01a2133a-c9f3-74e7-82fd-4f766c1178d1",
+    "timestamp": "2026-11-25T15:02:29Z"
+  },
   "version": "1.0.0",
-  "lastUpdated": "2026-11-22",
+  "lastUpdated": "2026-11-25",
   "schema": {
     "primary_domain": { "type": "single-select", "required": true, "label": "Primary Domain" },
     "secondary_domains": { "type": "multi-select", "required": false, "label": "Secondary Domains" },
@@ -43,41 +47,41 @@
     "platform": {
       "label": "Platform",
       "options": [
-        {"id": "web", "label": "Web"},
-        {"id": "cli", "label": "CLI"},
-        {"id": "api_only", "label": "API-only"},
-        {"id": "desktop_linux", "label": "Desktop (Linux)"},
-        {"id": "desktop_macos", "label": "Desktop (macOS)"},
-        {"id": "desktop_windows", "label": "Desktop (Windows)"},
-        {"id": "ios", "label": "iOS"},
-        {"id": "android", "label": "Android"}
+        { "id": "web", "label": "Web" },
+        { "id": "cli", "label": "CLI" },
+        { "id": "api_only", "label": "API-only" },
+        { "id": "desktop_linux", "label": "Desktop (Linux)" },
+        { "id": "desktop_macos", "label": "Desktop (macOS)" },
+        { "id": "desktop_windows", "label": "Desktop (Windows)" },
+        { "id": "ios", "label": "iOS" },
+        { "id": "android", "label": "Android" }
       ]
     },
     "delivery_model": {
       "label": "Delivery Model",
       "options": [
-        {"id": "saas", "label": "SaaS"},
-        {"id": "pwa", "label": "PWA"},
-        {"id": "native_app", "label": "Native App"},
-        {"id": "sdk_library", "label": "SDK / Library"}
+        { "id": "saas", "label": "SaaS" },
+        { "id": "pwa", "label": "PWA" },
+        { "id": "native_app", "label": "Native App" },
+        { "id": "sdk_library", "label": "SDK / Library" }
       ]
     },
     "monetization": {
       "label": "Monetization",
       "options": [
-        {"id": "open_source", "label": "Open Source"},
-        {"id": "free", "label": "Free"},
-        {"id": "freemium", "label": "Freemium"},
-        {"id": "subscription", "label": "Subscription"}
+        { "id": "open_source", "label": "Open Source" },
+        { "id": "free", "label": "Free" },
+        { "id": "freemium", "label": "Freemium" },
+        { "id": "subscription", "label": "Subscription" }
       ]
     },
     "ai_integration": {
       "label": "AI/ML Integration",
       "options": [
-        {"id": "none", "label": "None"},
-        {"id": "ai_assisted", "label": "AI-Assisted"},
-        {"id": "ai_powered", "label": "AI-Powered"},
-        {"id": "generative_ai", "label": "Generative AI"}
+        { "id": "none", "label": "None" },
+        { "id": "ai_assisted", "label": "AI-Assisted" },
+        { "id": "ai_powered", "label": "AI-Powered" },
+        { "id": "generative_ai", "label": "Generative AI" }
       ]
     }
   }

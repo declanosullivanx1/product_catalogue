@@ -1,9 +1,15 @@
+<!--
+  UUIDv7: 01a2133a-c9ec-71b4-addf-cc0ac1a9d7d6
+  Timestamp: 2026-11-25T15:02:29Z
+-->
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Project Details</title>
+  <meta name="x-build-uuid" content="01a2133a-c9ec-71b4-addf-cc0ac1a9d7d6">
+  <meta name="x-build-timestamp" content="2026-11-25T15:02:29Z">
 
   <script>
     (function () {
@@ -42,7 +48,6 @@
     </div>
 
     <article id="project-detail" style="display: none;">
-      <!-- Title & Canonical Link Header -->
       <header>
         <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem;">
           <div>
@@ -55,7 +60,6 @@
         </div>
       </header>
 
-      <!-- Primary Domain Banner -->
       <section class="domain-banner">
         <span id="domain-icon" class="domain-icon">📁</span>
         <div>
@@ -64,38 +68,18 @@
         </div>
       </section>
 
-      <!-- Taxonomy Breakdown Grid -->
       <section class="detail-card">
         <h3>Taxonomy & Classification</h3>
         <div class="facet-grid">
-          <div class="facet-item">
-            <strong>Sub-Categories</strong>
-            <div id="sub-cat-list" class="tag-list"></div>
-          </div>
-          <div class="facet-item">
-            <strong>Tags</strong>
-            <div id="tag-list" class="tag-list"></div>
-          </div>
-          <div class="facet-item">
-            <strong>Platform</strong>
-            <div id="facet-platform" class="tag-list"></div>
-          </div>
-          <div class="facet-item">
-            <strong>Delivery Model</strong>
-            <div id="facet-delivery" class="tag-list"></div>
-          </div>
-          <div class="facet-item">
-            <strong>Monetization</strong>
-            <div id="facet-monetization" class="tag-list"></div>
-          </div>
-          <div class="facet-item">
-            <strong>AI Integration</strong>
-            <div id="facet-ai" class="tag-list"></div>
-          </div>
+          <div class="facet-item"><strong>Sub-Categories</strong><div id="sub-cat-list" class="tag-list"></div></div>
+          <div class="facet-item"><strong>Tags</strong><div id="tag-list" class="tag-list"></div></div>
+          <div class="facet-item"><strong>Platform</strong><div id="facet-platform" class="tag-list"></div></div>
+          <div class="facet-item"><strong>Delivery Model</strong><div id="facet-delivery" class="tag-list"></div></div>
+          <div class="facet-item"><strong>Monetization</strong><div id="facet-monetization" class="tag-list"></div></div>
+          <div class="facet-item"><strong>AI Integration</strong><div id="facet-ai" class="tag-list"></div></div>
         </div>
       </section>
 
-      <!-- Version History (MVP Feature) -->
       <section class="detail-card">
         <h3>Deployment Versions</h3>
         <p style="font-size: 0.85rem; color: var(--pico-muted-color);">
@@ -106,7 +90,6 @@
     </article>
   </main>
 
-  <!-- Inline Theme Sync -->
   <script>
     (function () {
       const btn = document.getElementById('theme-toggle');
@@ -123,7 +106,7 @@
         btn.addEventListener('click', function () {
           cTheme = cTheme === 'light' ? 'dark' : 'light';
           document.documentElement.setAttribute('data-theme', cTheme);
-          try { localStorage.setItem('theme', cTheme); } catch(e){}
+          try { localStorage.setItem('theme', cTheme); } catch(e) {}
           sync(cTheme);
         });
       }

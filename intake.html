@@ -1,0 +1,243 @@
+<!--
+  UUIDv7: 01a2133a-c9ef-7372-9353-d301e3a384a0
+  Timestamp: 2026-11-25T15:02:29Z
+-->
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catalog Backlog — Intake Terminal</title>
+  <meta name="x-build-uuid" content="01a2133a-c9ef-7372-9353-d301e3a384a0">
+  <meta name="x-build-timestamp" content="2026-11-25T15:02:29Z">
+
+  <script>
+    (function () {
+      let theme = 'light';
+      try {
+        const saved = localStorage.getItem('theme');
+        if (saved === 'dark' || saved === 'light') theme = saved;
+      } catch (e) {}
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <style>
+    :root { --pico-font-size: 88%; }
+    .status-badge { font-size: 0.75rem; padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: 600; }
+    .badge-saved { background-color: var(--pico-ins-color); color: white; }
+    .badge-dirty { background-color: var(--pico-del-color); color: white; }
+    .badge-avail { background-color: #137333; color: white; }
+    .badge-taken { background-color: #c5221f; color: white; }
+    .preflight-card {
+      border: 1px solid var(--pico-muted-border-color);
+      padding: 1rem;
+      border-radius: var(--pico-border-radius);
+      margin-bottom: 1.5rem;
+      background-color: var(--pico-card-background-color);
+    }
+  </style>
+</head>
+<body>
+  <header class="container">
+    <nav>
+      <ul><li><strong>Backlog Intake Cockpit</strong></li></ul>
+      <ul>
+        <li><span id="draft-status" class="status-badge badge-saved">Draft Clean</span></li>
+        <li><a href="/" class="secondary">Back to Catalog</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    <form id="intake-form">
+      <div class="grid">
+        <div>
+          <label for="uuid-field">UUID v7 (Auto-Generated)
+            <input type="text" id="uuid-field" readonly>
+          </label>
+        </div>
+        <div>
+          <label for="account-select">Google Account ID
+            <select id="account-select" required>
+              <option value="declanjosephosullivan@gmail.com">declanjosephosullivan@gmail.com (Default)</option>
+              <option value="declanosullivanx1@gmail.com">declanosullivanx1@gmail.com</option>
+              <option value="cathal.and.declan@gmail.com">cathal.and.declan@gmail.com</option>
+              <option value="declanjosullivan86@gmail.com">declanjosullivan86@gmail.com</option>
+              <option value="declanseer@gmail.com">declanseer@gmail.com</option>
+              <option value="declanjoseph2025@gmail.com">declanjoseph2025@gmail.com</option>
+              <option value="davewilson1x1@gmail.com">davewilson1x1@gmail.com</option>
+              <option value="charlie.and.declan.osullivan@gmail.com">charlie.and.declan.osullivan@gmail.com</option>
+              <option value="declan@transparency-x.com">declan@transparency-x.com</option>
+              <option value="Other">Other</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label for="chat-link">Active Chat Session URL
+            <input type="url" id="chat-link" placeholder="https://claude.ai/chat/..." required>
+          </label>
+        </div>
+        <div>
+          <label for="llm-select">LLM Account / Platform
+            <select id="llm-select" required>
+              <option value="">Select Platform...</option>
+              <option value="Google AI Studio Web App">Google AI Studio Web App</option>
+              <option value="Gemini Chat Web App">Gemini Chat Web App</option>
+              <option value="Qwen AI Studio">Qwen AI Studio</option>
+              <option value="Kimi AI">Kimi AI</option>
+              <option value="ChatGPT Web App">ChatGPT Web App</option>
+              <option value="Claude AI Web App">Claude AI Web App</option>
+              <option value="Other">Other</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label for="project-title">Project Title
+            <input type="text" id="project-title" placeholder="e.g. Edge Image Transformer" required>
+          </label>
+        </div>
+        <div>
+          <label>Target Pages Subdomain
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <input type="text" id="slug-preview" placeholder="edge-image-transformer" readonly>
+              <span id="domain-badge" class="status-badge" style="display:none;">Probing...</span>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <label for="project-desc">Description / Target Function
+        <textarea id="project-desc" placeholder="One-line summary of what was built in this chat..."></textarea>
+      </label>
+
+      <details>
+        <summary><strong>Raw Chat / Artifact Import Zone (Extract Code)</strong></summary>
+        <textarea id="raw-chat-dump" placeholder="Paste full chat text or Claude <antArtifact> code here..."></textarea>
+        <button type="button" id="extract-code-btn" class="secondary outline" style="margin-bottom:1rem;">
+          Extract Clean Code into Notes
+        </button>
+      </details>
+
+      <div class="grid">
+        <div>
+          <label for="project-notes">Architecture Notes & Implementation Details
+            <textarea id="project-notes" style="min-height:120px;" placeholder="Architecture details, dependencies, extracted code..."></textarea>
+          </label>
+        </div>
+        <div>
+          <label for="project-issues">Bugs & Issues Checklist (Use [BLOCKER] for fatal bugs)
+            <textarea id="project-issues" style="min-height:120px;" placeholder="- [ ] [BLOCKER] Token refresh fails on mobile&#10;- [ ] [POLISH] Update footer font size"></textarea>
+          </label>
+        </div>
+      </div>
+
+      <div class="preflight-card">
+        <strong>Pre-Flight Telemetry:</strong>
+        <div class="grid" style="margin-top:0.5rem;">
+          <div>Context Window Load: <span id="telemetry-context">0 tokens (Healthy)</span></div>
+          <div>Checklist Status: <span id="telemetry-checklist">No tasks</span></div>
+          <div>Promotion Gate: <span id="telemetry-gate" style="color:var(--pico-ins-color);">READY</span></div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <button type="button" id="copy-tsv-btn" class="contrast">Copy Row for Google Sheets</button>
+        <button type="button" id="catchup-prompt-btn" class="secondary">Copy Catch-Up Prompt for AI</button>
+        <button type="button" id="clear-draft-btn" class="secondary outline">Reset Draft</button>
+      </div>
+    </form>
+  </main>
+
+  <script src="/js/intake.js"></script>
+  <script src="/js/triage.js"></script>
+  <script>
+    const titleInput = document.getElementById('project-title');
+    const slugInput = document.getElementById('slug-preview');
+    const domainBadge = document.getElementById('domain-badge');
+    const issuesInput = document.getElementById('project-issues');
+    const notesInput = document.getElementById('project-notes');
+    const rawDump = document.getElementById('raw-chat-dump');
+    const gateStatus = document.getElementById('telemetry-gate');
+    const checklistStatus = document.getElementById('telemetry-checklist');
+    const contextStatus = document.getElementById('telemetry-context');
+
+    titleInput.addEventListener('input', () => {
+      const slug = titleInput.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      slugInput.value = slug ? `${slug}.pages.dev` : '';
+      if (slug) {
+        domainBadge.style.display = 'inline-block';
+        domainBadge.textContent = 'Probing DNS...';
+        domainBadge.className = 'status-badge';
+        window.probePagesSubdomain(slug, (status) => {
+          if (status === 'AVAILABLE') {
+            domainBadge.textContent = 'Domain Available';
+            domainBadge.className = 'status-badge badge-avail';
+          } else if (status === 'TAKEN') {
+            domainBadge.textContent = 'Subdomain Taken';
+            domainBadge.className = 'status-badge badge-taken';
+          } else {
+            domainBadge.style.display = 'none';
+          }
+        });
+      } else {
+        domainBadge.style.display = 'none';
+      }
+    });
+
+    document.getElementById('extract-code-btn').addEventListener('click', () => {
+      const extracted = window.extractArtifacts(rawDump.value);
+      if (extracted) {
+        notesInput.value = (notesInput.value ? notesInput.value + "\n\n" : "") + extracted;
+        rawDump.value = "";
+        alert("Extracted clean code artifacts into Notes field!");
+      } else {
+        alert("No code blocks or <antArtifact> tags detected in paste.");
+      }
+    });
+
+    document.getElementById('catchup-prompt-btn').addEventListener('click', () => {
+      const prompt = window.generateCatchUpPrompt(
+        titleInput.value,
+        document.getElementById('project-desc').value,
+        notesInput.value,
+        issuesInput.value,
+        document.getElementById('llm-select').value
+      );
+      navigator.clipboard.writeText(prompt).then(() => {
+        alert("Catch-Up Prompt copied to clipboard! Paste directly into your LLM chat.");
+      });
+    });
+
+    function updateTelemetry() {
+      const hasBlocker = issuesInput.value.toUpperCase().includes('[BLOCKER]');
+      if (hasBlocker) {
+        gateStatus.textContent = 'LOCKED ([BLOCKER] Present)';
+        gateStatus.style.color = '#c5221f';
+      } else {
+        gateStatus.textContent = 'READY FOR PROMOTION';
+        gateStatus.style.color = 'var(--pico-ins-color)';
+      }
+      const matches = issuesInput.value.match(/- \[[ xX]\]/g);
+      if (matches) {
+        const done = (issuesInput.value.match(/- \[[xX]\]/g) || []).length;
+        checklistStatus.textContent = `${done}/${matches.length} Tasks Closed (${Math.round((done/matches.length)*100)}%)`;
+      } else {
+        checklistStatus.textContent = 'No markdown checklist';
+      }
+      const tokens = Math.ceil(((notesInput.value || "").length + (issuesInput.value || "").length) / 4);
+      contextStatus.textContent = `~${tokens.toLocaleString()} tokens`;
+    }
+
+    issuesInput.addEventListener('input', updateTelemetry);
+    notesInput.addEventListener('input', updateTelemetry);
+  </script>
+</body>
+</html>

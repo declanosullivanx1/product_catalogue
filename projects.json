@@ -1,5 +1,9 @@
 [
   {
+    "_meta": {
+      "uuid_v7": "01a2133a-c9f1-7a08-8ddf-fdb8b1b36c6c",
+      "timestamp": "2026-11-25T15:02:29Z"
+    },
     "slug": "aura-scaler",
     "name": "Aura Scaler",
     "description": "Dynamic WebP/AVIF image transformation pipeline running on Cloudflare Workers.",

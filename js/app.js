@@ -1,6 +1,7 @@
 /**
- * Personal Product Catalog — Controller
- * Loads projects.json + taxonomy.json concurrently with zero build steps.
+ * UUIDv7: 01a2133a-c9f9-775a-892f-b7012cd211e3
+ * Timestamp: 2026-11-25T15:02:29Z
+ * Main Catalog Table Controller
  */
 
 (function () {
@@ -43,13 +44,11 @@
   function initTable(projects, taxonomy) {
     const statusEl = document.getElementById('table-status');
 
-    // Build Domain Lookup Map
     const domainMap = new Map();
     (taxonomy.domains || []).forEach(function (d) {
       domainMap.set(d.id, { label: d.label, icon: d.icon || '📁' });
     });
 
-    // Populate data with resolved domain text
     const processedData = projects.map(function (item) {
       const dom = domainMap.get(item.primary_domain) || { label: 'General', icon: '📦' };
       return {
@@ -77,7 +76,6 @@
         responsiveLayoutCollapseStartOpen: false,
         placeholder: 'No matching projects found.',
 
-        // Responsive Collapse: Shows full taxonomy metadata
         responsiveLayoutCollapseFormatter: function (data) {
           const dl = document.createElement('dl');
           const rowData = data[0] ? data[0].getRow().getData() : null;
@@ -98,7 +96,6 @@
             }
           });
 
-          // Render Tags & Subcategories inside accordion
           if (rowData && rowData.tags && rowData.tags.length > 0) {
             const dtTags = document.createElement('dt');
             dtTags.textContent = 'Tags';
@@ -119,7 +116,6 @@
           return dl;
         },
 
-        // Keyboard Operability Polyfill
         rowFormatter: function (row) {
           const toggle = row.getElement().querySelector('.tabulator-responsive-collapse-toggle');
           if (toggle && !toggle.dataset.a11yInit) {
@@ -152,7 +148,6 @@
             resizable: false,
             headerSort: false
           },
-          // Project Column: Links to project.html detail page
           {
             title: 'Project',
             field: 'name',
@@ -160,7 +155,6 @@
             responsive: 0,
             headerFilter: 'input',
             headerFilterPlaceholder: 'Search...',
-            // Universal Search across Name, Description, Domain, and Tags
             headerFilterFunc: function (headerValue, rowValue, rowData) {
               if (!headerValue) return true;
               const q = headerValue.toLowerCase().trim();
@@ -181,7 +175,6 @@
               return container;
             }
           },
-          // Domain Column: Displays icon + label with built-in dropdown filter
           {
             title: 'Primary Domain',
             field: 'domainDisplay',
@@ -197,7 +190,6 @@
               return span;
             }
           },
-          // Canonical URL
           {
             title: 'Canonical URL',
             field: 'canonicalUrl',
@@ -209,7 +201,6 @@
               return createSafeLink(cell.getValue(), cell.getValue());
             }
           },
-          // Type Column
           {
             title: 'Type',
             field: 'type',
@@ -226,7 +217,6 @@
               return span;
             }
           },
-          // Description
           {
             title: 'Description',
             field: 'description',
@@ -235,7 +225,6 @@
             headerFilter: 'input',
             headerFilterPlaceholder: 'Filter text...'
           },
-          // Status
           {
             title: 'Status',
             field: 'status',
@@ -268,15 +257,13 @@
     const statusEl = document.getElementById('table-status');
 
     Promise.all([
-      fetch('./projects.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }),
-      fetch('./taxonomy.json', { cache: 'no-cache' }).then(function (r) { return r.json(); })
+      fetch('/projects.json', { cache: 'no-cache' }).then(r => r.json()),
+      fetch('/taxonomy.json', { cache: 'no-cache' }).then(r => r.json())
     ])
-    .then(function (results) {
-      const projects = results[0];
-      const taxonomy = results[1];
-      initTable(projects, taxonomy);
+    .then(results => {
+      initTable(results[0], results[1]);
     })
-    .catch(function (err) {
+    .catch(err => {
       if (statusEl) {
         statusEl.innerHTML = '<strong>Error loading catalog data:</strong> ' + err.message;
       }

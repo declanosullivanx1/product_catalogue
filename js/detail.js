@@ -1,6 +1,7 @@
 /**
+ * UUIDv7: 01a2133a-c9fe-7851-9d98-f923e7b8684c
+ * Timestamp: 2026-11-25T15:02:29Z
  * Project Detail View Controller
- * Hydrates project.html using ?p=<slug> parameter.
  */
 
 (function () {
@@ -17,20 +18,19 @@
   }
 
   Promise.all([
-    fetch('./projects.json').then(function (r) { return r.json(); }),
-    fetch('./taxonomy.json').then(function (r) { return r.json(); })
+    fetch('/projects.json').then(r => r.json()),
+    fetch('/taxonomy.json').then(r => r.json())
   ])
-  .then(function (results) {
+  .then(results => {
     const projects = results[0];
     const taxonomy = results[1];
 
-    const project = projects.find(function (p) { return p.slug === slug; });
+    const project = projects.find(p => p.slug === slug);
     if (!project) {
       statusEl.innerHTML = '<strong>Project not found.</strong> <a href="/">Return to Catalog</a>';
       return;
     }
 
-    // Hydrate Header
     document.getElementById('proj-name').textContent = project.name;
     document.getElementById('proj-desc').textContent = project.description;
     document.title = project.name + ' — Details';
@@ -40,15 +40,13 @@
     canonicalBtn.href = canonicalUrl;
     if (canonicalUrl === '#') canonicalBtn.style.display = 'none';
 
-    // Hydrate Domain Banner
-    const domain = (taxonomy.domains || []).find(function (d) { return d.id === project.primary_domain; });
+    const domain = (taxonomy.domains || []).find(d => d.id === project.primary_domain);
     if (domain) {
       document.getElementById('domain-icon').textContent = domain.icon || '📁';
       document.getElementById('domain-label').textContent = domain.label;
       document.getElementById('domain-desc').textContent = domain.description || '';
     }
 
-    // Helper: Render Chip Lists
     function renderChips(containerId, items, prefix) {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
@@ -57,7 +55,7 @@
         return;
       }
       const arr = Array.isArray(items) ? items : [items];
-      arr.forEach(function (val) {
+      arr.forEach(val => {
         const span = document.createElement('span');
         span.className = 'taxonomy-tag';
         span.textContent = (prefix || '') + val;
@@ -72,12 +70,11 @@
     renderChips('facet-monetization', project.monetization);
     renderChips('facet-ai', project.ai_integration);
 
-    // Hydrate Version History
     const versionList = document.getElementById('version-list');
     versionList.innerHTML = '';
 
     if (project.cfProjectName && project.versions && project.versions.length > 0) {
-      project.versions.forEach(function (v) {
+      project.versions.forEach(v => {
         const li = document.createElement('li');
         li.className = 'version-item';
 
@@ -111,11 +108,10 @@
       versionList.innerHTML = '<li><small style="color:var(--pico-muted-color);">No deployment version history available for external / non-Pages projects.</small></li>';
     }
 
-    // Reveal UI
     statusEl.style.display = 'none';
     articleEl.style.display = 'block';
   })
-  .catch(function (err) {
+  .catch(err => {
     statusEl.innerHTML = '<strong>Error loading project:</strong> ' + err.message;
   });
 })();

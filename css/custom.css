@@ -1,6 +1,7 @@
-/* ==========================================================================
-   Base Layout & Theme Setup
-   ========================================================================== */
+/*
+  UUIDv7: 01a2133a-c9f7-7dd2-b2cc-b45fa804c550
+  Timestamp: 2026-11-25T15:02:29Z
+*/
 
 :root {
   --table-border-radius: 8px;
@@ -56,10 +57,6 @@ main.container {
   font-size: 0.95rem;
 }
 
-/* ==========================================================================
-   Tabulator Integration & CRITICAL Filter Box Overlap Fix
-   ========================================================================== */
-
 .table-wrapper {
   border-radius: var(--table-border-radius);
   overflow-x: auto;
@@ -99,18 +96,13 @@ main.container {
 /* --- FIX FOR OVERLAPPING MAGNIFYING GLASS & FILTER BOXES --- */
 .tabulator .tabulator-header .tabulator-col input,
 .tabulator .tabulator-header .tabulator-col select {
-  /* 1. Strip Pico's search icon and pill shape */
   background-image: none !important;
   -webkit-appearance: none !important;
   -moz-appearance: none !important;
   appearance: none !important;
-
-  /* 2. Reset padding so text starts cleanly on the left */
   padding: 0.35rem 0.5rem !important;
   padding-inline-start: 0.5rem !important;
   padding-inline-end: 0.5rem !important;
-
-  /* 3. Visual formatting */
   font-size: 14px !important;
   border: 1px solid var(--pico-muted-border-color) !important;
   border-radius: var(--pico-border-radius) !important;
@@ -124,7 +116,6 @@ main.container {
   box-shadow: none !important;
 }
 
-/* Remove Chrome/Safari native cancel and magnifying glass buttons */
 .tabulator .tabulator-header .tabulator-col input::-webkit-search-decoration,
 .tabulator .tabulator-header .tabulator-col input::-webkit-search-cancel-button,
 .tabulator .tabulator-header .tabulator-col input::-webkit-search-results-button,
@@ -133,7 +124,6 @@ main.container {
   -webkit-appearance: none !important;
 }
 
-/* Sort Arrow Styling & Contrast */
 .tabulator .tabulator-header .tabulator-col .tabulator-col-sorter .tabulator-arrow {
   border-bottom-color: var(--pico-muted-color) !important;
 }
@@ -150,7 +140,6 @@ main.container {
   border-top-color: var(--pico-primary) !important;
 }
 
-/* Rows & Hover */
 .tabulator .tabulator-row {
   background-color: var(--pico-background-color) !important;
   color: var(--pico-color) !important;
@@ -173,7 +162,6 @@ main.container {
   align-items: center;
 }
 
-/* Links */
 .tabulator-cell a.canonical-link,
 .tabulator-responsive-collapse a.canonical-link,
 a.project-title-link {
@@ -191,10 +179,6 @@ a.project-title-link {
 a.project-title-link:hover {
   text-decoration: underline;
 }
-
-/* ==========================================================================
-   Taxonomy Badges & Facet Styling
-   ========================================================================== */
 
 .badge {
   display: inline-flex;
@@ -234,17 +218,6 @@ a.project-title-link:hover {
   color: var(--pico-color);
 }
 
-.facet-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.15rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  border: 1px solid var(--pico-muted-border-color);
-}
-
-/* Responsive Collapse Accordion */
 .tabulator-responsive-collapse {
   padding: 0.75rem !important;
   background-color: var(--pico-card-background-color) !important;
@@ -284,10 +257,6 @@ a.project-title-link:hover {
 .tabulator-row .tabulator-responsive-collapse-toggle:focus-visible {
   outline: 2px solid var(--pico-primary) !important;
 }
-
-/* ==========================================================================
-   Project Detail View (project.html)
-   ========================================================================== */
 
 .detail-card {
   padding: 1.5rem;
@@ -345,23 +314,17 @@ a.project-title-link:hover {
   border-bottom: none;
 }
 
-/* ==========================================================================
-   Mobile-First Viewports (<= 480px / 360px target)
-   ========================================================================== */
 @media (max-width: 480px) {
   :root {
     --table-font-size: 0.85rem;
   }
-
   main.container {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
   }
-
   .toggle-text {
     display: none;
   }
-
   .theme-toggle-btn {
     padding: 0.4rem 0.6rem;
   }

@@ -1,3 +1,7 @@
+<!--
+  UUIDv7: 01a2133a-c9ea-7e09-a70c-ef5717878e29
+  Timestamp: 2026-11-25T15:02:29Z
+-->
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -5,35 +9,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Product Catalog</title>
   <meta name="description" content="Production catalog of web apps, CLIs, libraries, and APIs.">
+  <meta name="x-build-uuid" content="01a2133a-c9ea-7e09-a70c-ef5717878e29">
+  <meta name="x-build-timestamp" content="2026-11-25T15:02:29Z">
 
-  <!-- CRITICAL: Hardened theme script wrapped in try/catch to survive Safari Private Browsing -->
+  <!-- Immediate light-first theme script (FOUC Prevention) -->
   <script>
     (function () {
       let theme = 'light';
       try {
         const saved = localStorage.getItem('theme');
-        if (saved === 'dark' || saved === 'light') {
-          theme = saved;
-        }
-      } catch (e) {
-        // Storage access blocked/restricted; gracefully fallback to explicit 'light'
-      }
+        if (saved === 'dark' || saved === 'light') theme = saved;
+      } catch (e) {}
       document.documentElement.setAttribute('data-theme', theme);
     })();
   </script>
 
-  <!-- Pico.css v2 (CDN) -->
-  <link rel="stylesheet" 
-        href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" 
-        crossorigin="anonymous">
-
-  <!-- Tabulator v6.2 (CDN) -->
-  <link rel="stylesheet" 
-        href="https://unpkg.com/tabulator-tables@6.2.5/dist/css/tabulator.min.css" 
-        crossorigin="anonymous">
-
-  <!-- Custom Site Styling -->
-  <link rel="stylesheet" href="css/custom.css">
+  <!-- Pico.css v2 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" crossorigin="anonymous">
+  <!-- Tabulator v6.2 -->
+  <link rel="stylesheet" href="https://unpkg.com/tabulator-tables@6.2.5/dist/css/tabulator.min.css" crossorigin="anonymous">
+  <!-- Custom Styling -->
+  <link rel="stylesheet" href="/css/custom.css">
 </head>
 <body>
   <header class="container header-container">
@@ -42,14 +38,10 @@
         <li><strong>Product Catalog</strong></li>
       </ul>
       <ul>
+        <li><a href="/intake.html" class="contrast outline" style="font-size:0.8rem; padding:0.3rem 0.6rem;">+ Backlog Intake</a></li>
         <li>
-          <button 
-            id="theme-toggle" 
-            class="outline secondary theme-toggle-btn" 
-            type="button" 
-            aria-label="Toggle dark/light theme" 
-            aria-pressed="false">
-            <span id="theme-icon" aria-hidden="true">🌙</span>
+          <button id="theme-toggle" class="outline secondary theme-toggle-btn" type="button" aria-label="Toggle theme">
+            <span id="theme-icon">🌙</span>
             <span id="theme-label" class="toggle-text">Dark Mode</span>
           </button>
         </li>
@@ -63,16 +55,11 @@
         <p class="description-text">Production deployment index and software registry.</p>
       </div>
 
-      <!-- Live Loading / Error Feedback Region -->
       <div id="table-status" role="status" aria-live="polite" class="status-message">
-        <span aria-busy="true">Loading catalog data...</span>
+        <span aria-busy="true">Loading catalog & taxonomy data...</span>
       </div>
 
-      <!-- Tabulator Mounting Point -->
-      <div id="projects-table" 
-           class="table-wrapper" 
-           role="region" 
-           aria-label="Projects and Products Table"></div>
+      <div id="projects-table" class="table-wrapper" role="region" aria-label="Projects Table"></div>
     </section>
   </main>
 
@@ -80,9 +67,31 @@
     <small>All production web apps resolve to their canonical <code>*.pages.dev</code> alias.</small>
   </footer>
 
-  <!-- Tabulator JS -->
+  <script>
+    (function () {
+      const btn = document.getElementById('theme-toggle');
+      const icon = document.getElementById('theme-icon');
+      const label = document.getElementById('theme-label');
+      function sync(t) {
+        const isD = t === 'dark';
+        if (icon) icon.textContent = isD ? '☀️' : '🌙';
+        if (label) label.textContent = isD ? 'Light Mode' : 'Dark Mode';
+        if (btn) btn.setAttribute('aria-pressed', isD ? 'true' : 'false');
+      }
+      let cTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      sync(cTheme);
+      if (btn) {
+        btn.addEventListener('click', function () {
+          cTheme = cTheme === 'light' ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', cTheme);
+          try { localStorage.setItem('theme', cTheme); } catch(e) {}
+          sync(cTheme);
+        });
+      }
+    })();
+  </script>
+
   <script src="https://unpkg.com/tabulator-tables@6.2.5/dist/js/tabulator.min.js" crossorigin="anonymous"></script>
-  <!-- Application Logic -->
-  <script src="js/app.js"></script>
+  <script src="/js/app.js"></script>
 </body>
 </html>
